@@ -1,0 +1,36 @@
+create database hello1;
+use hello1;
+create table student(rollno int primary key,name varchar(20),address varchar(20));
+alter table student add column totalmarks int;
+select * from student;
+insert into student values(101,"Anjali","ABC house",120);
+insert into student values(102,"Anju","ABCD house",180);
+insert into student values(103,"Anjima","BC house",160);
+insert into student values(104,"Anjisha","BCD house",110);
+insert into student values(105,"Amal"," AMhouse",140);
+create table course(cid int primary key,course_name varchar(20),fees int(10));
+insert into course values(1001,"BCA",14000);
+insert into course values(1002,"MSc",15000);
+insert into course values(1003,"MSW",18000);
+insert into course values(1004,"MA",16000);
+insert into course values(1005,"MCA",14000);
+insert into course values(1005,"MCA",14000);
+select * from course;
+drop  table course;
+drop table admission;
+create table admission(rollno int,foreign key(rollno)references student(rollno),cid int,foreign key(cid)references course(cid),sem int,primary key(rollno,cid));
+insert into admission values(101,1001,1);
+insert into admission values(102,1003,2);
+insert into admission values(103,1002,4);
+insert into admission values(104,1004,3);
+insert into admission values(105,1005,2);
+insert into admission values(105,1004,2);
+select * from admission;
+
+3.------------
+create view college1 as select student.rollno,course.cid,course.course_name from student,admission,course where course.cid=admission.cid and student.rollno=admission.rollno and course.course_name="MCA";
+select * from college1;
+4.-------------
+select sum(course.fees) as course_fees from course,admission,student where student.rollno=105 and course.cid=admission.cid and student.rollno=admission.rollno;
+5.------------
+select course.course_name,count(rollno) as no_of_students from course,admission where course.cid=admission.cid group by(course_name);
