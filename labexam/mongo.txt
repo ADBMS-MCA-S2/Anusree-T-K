@@ -1,0 +1,127 @@
+ use exam
+switched to db exam
+> db.createCollection("student")
+{
+        "ok" : 0,
+        "errmsg" : "Collection already exists. NS: exam.student",
+        "code" : 48,
+        "codeName" : "NamespaceExists"
+}
+> db.createCollection("student1")
+{ "ok" : 1 }
+> db.student1.insert({"_id=1,name:"Anjali",place:"kollam",phone:8582638562,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:30,external:45},department:"MCA"})
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:33
+> db.student1.insert({"_id:1,name:"Anjali",place:"kollam",phone:8582638562,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:30,external:45},department:"MCA"})
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:33
+> db.student1.insert({_id:1,name:"Anjali",place:"kollam",phone:8582638562,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:30,external:45},department:"MCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student1.insert({_id:2,name:"Anuradha",place:"Varkala",phone:9992638562,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:40,external:45},department:"Civil"})
+WriteResult({ "nInserted" : 1 })
+> db.student1.insert({_id:3,name:"Bismiya",place:"kollam",phone:9442638562,vaccination_status:"not_vaccinated",RTPCR:"positive",lab_mark:{internal:50,external:39},department:"MCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student1.insert({_id:4,name:"Vimal",place:"Eranakulam",phone:8582638562,vaccination_status:"First dose only",RTPCR:"positive",lab_mark:{internal:40,external:42},department:"Civil"})
+WriteResult({ "nInserted" : 1 })
+> db.student1.insert({_id:5,name:"Vivek",place:"kollam",phone:858263977,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:50,external:50},department:"MCA"}})
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell):1:176
+> db.student1.insert({_id:5,name:"Vivek",place:"kollam",phone:858263977,vaccination_status:"Both_vaccinated",RTPCR:"negative",lab_mark:{internal:50,external:50},department:"MCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student1.find().pretty()
+{
+        "_id" : 1,
+        "name" : "Anjali",
+        "place" : "kollam",
+        "phone" : 8582638562,
+        "vaccination_status" : "Both_vaccinated",
+        "RTPCR" : "negative",
+        "lab_mark" : {
+                "internal" : 30,
+                "external" : 45
+        },
+        "department" : "MCA"
+}
+{
+        "_id" : 2,
+        "name" : "Anuradha",
+        "place" : "Varkala",
+        "phone" : 9992638562,
+        "vaccination_status" : "Both_vaccinated",
+        "RTPCR" : "negative",
+        "lab_mark" : {
+                "internal" : 40,
+                "external" : 45
+        },
+        "department" : "Civil"
+}
+{
+        "_id" : 3,
+        "name" : "Bismiya",
+        "place" : "kollam",
+        "phone" : 9442638562,
+        "vaccination_status" : "not_vaccinated",
+        "RTPCR" : "positive",
+        "lab_mark" : {
+                "internal" : 50,
+                "external" : 39
+        },
+        "department" : "MCA"
+}
+{
+        "_id" : 4,
+        "name" : "Vimal",
+        "place" : "Eranakulam",
+        "phone" : 8582638562,
+        "vaccination_status" : "First dose only",
+        "RTPCR" : "positive",
+        "lab_mark" : {
+                "internal" : 40,
+                "external" : 42
+        },
+        "department" : "Civil"
+}
+{
+        "_id" : 5,
+        "name" : "Vivek",
+        "place" : "kollam",
+        "phone" : 858263977,
+        "vaccination_status" : "Both_vaccinated",
+        "RTPCR" : "negative",
+        "lab_mark" : {
+                "internal" : 50,
+                "external" : 50
+        },
+        "department" : "MCA"
+
+
+
+
+#1-----------
+
+
+ db.student1.find({vaccination_status:"Both_vaccinated"},{name:1,phone:1})
+{ "_id" : 1, "name" : "Anjali", "phone" : 8582638562 }
+{ "_id" : 2, "name" : "Anuradha", "phone" : 9992638562 }
+{ "_id" : 5, "name" : "Vivek", "phone" : 858263977 }
+
+
+
+#2--------
+
+
+
+db.student1.find({department:"MCA"},{name:1,phone:1}).sort({"lab_mark.external":-1}).limit(2)
+{ "_id" : 5, "name" : "Vivek", "phone" : 858263977 }
+{ "_id" : 1, "name" : "Anjali", "phone" : 8582638562 }
+
+
+
+
+
+
+
+#3----------
+ db.student1.find({name:{$regex:"^A"}},{_id:1,name:1,department:1})
+{ "_id" : 1, "name" : "Anjali", "department" : "MCA" }
+{ "_id" : 2, "name" : "Anuradha", "department" : "Civil" }
